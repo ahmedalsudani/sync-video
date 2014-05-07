@@ -23,6 +23,9 @@ viewers.
 
 ### TODO
 
+- Fix race condition where you quickly play and then pause. This will cause the
+  two events (Firebase and video) to keep firing opposite messages and the
+  viewer will simply go back and forth between play and pause.
 - Change behavior so that syncVideo is a function that takes a video element and
   syncs that
 - ~~Maybe sync time too~~ <br/>
