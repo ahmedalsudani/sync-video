@@ -1,3 +1,10 @@
+/*
+ * Author: Ahmed Al-Sudani
+ * Email: ahmed [at] al-sudani.com
+ * License: GPLv3
+ * (C) 2014 Ahmed Al-Sudani
+ */
+
 /* global $, Firebase, FIREBASE_ROOT */
 (function() {
     'use strict';
