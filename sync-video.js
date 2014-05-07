@@ -3,13 +3,20 @@
     'use strict';
     var updatePlay = function (playingState) {
         //noinspection JSHint
-        playingState ? video.play() : video.pause();
+        playingState.val() ? video[0].play() : video[0].pause();
         },
         fb = new Firebase(FIREBASE_ROOT),
         playing = fb.child('playing'),
         time = fb.child('time'),
-        video = $('.sync-video')[0];
-    video.on('play', playing.set(true));
-    video.on('pause', playing.set(false));
+        video = $('.sync-video');
+
+    video.on('play', function() {
+        playing.set(true);
+    });
+
+    video.on('pause', function() {
+        playing.set(false);
+    });
+
     playing.on('value', updatePlay);
 }());
