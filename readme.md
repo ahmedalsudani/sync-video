@@ -25,5 +25,7 @@ viewers.
 
 - Change behavior so that syncVideo is a function that takes a video element and
   syncs that
-- Maybe sync time too
-- Maybe let user jump to where other user is
+- ~~Maybe sync time too~~ <br/>
+  This has been done though it's not perfect
+- ~~Maybe let user jump to where other user is~~ <br/>
+  Done. Seeking will move all player positions
