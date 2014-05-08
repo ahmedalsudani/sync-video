@@ -11,11 +11,13 @@
 
 (function () {
     'use strict';
-    var fb = new Firebase(FIREBASE_ROOT),
+    var video = $('.sync-video'),
+        fb = new Firebase(FIREBASE_ROOT)
+            .child(encodeURIComponent(video[0].currentSrc)
+                .replace('.', '%2E')),
         playing = fb.child('playing'),
         seekTime = fb.child('seek-time'),
         playTime = fb.child('play-time'),
-        video = $('.sync-video'),
         lockRemoteState = false,
         initialized = false,
         initialTimePulled = false,
@@ -36,7 +38,7 @@
 
         // Push current video time to Firebase/seek-time
         pushSeekTime = function (e) {
-            if (lockRemoteState === true) {
+            if (lockRemoteState === false) {
                 seekTime.set(e.target.currentTime);
             }
         },
