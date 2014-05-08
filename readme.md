@@ -1,9 +1,16 @@
-#sync-video.js
+# sync-video
 
 ## What is this?
 
 A tiny minimalist JavaScript app that syncs play/pause status across different
 viewers.
+
+## License
+
+sync-video is licensed under GPLv3.
+
+The text of GPLv3 is included in [LICENSE](LICENSE) and can be found at
+http://www.gnu.org/licenses/licenses.html
 
 ## Notes
 
@@ -32,3 +39,5 @@ viewers.
   This has been done though it's not perfect
 - ~~Maybe let user jump to where other user is~~ <br/>
   Done. Seeking will move all player positions
+
+Copyright 2014 Ahmed Al-Sudani
