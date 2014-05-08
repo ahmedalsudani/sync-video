@@ -7,37 +7,80 @@
  * Copyright 2014 Ahmed Al-Sudani
  */
 
-/* global $, Firebase, FIREBASE_ROOT */
-(function() {
+/*global $, Firebase, FIREBASE_ROOT */
+
+(function () {
     'use strict';
-    var updatePlay = function (playingState) {
-        //noinspection JSHint
-        playingState.val() ? video[0].play() : video[0].pause();
-        },
-        pushTime = function(newTime) {
-            time.set(newTime);
-        },
-        pullTime = function(receivedTime) {
-            video[0].currentTime = receivedTime.val();
-        },
-        fb = new Firebase(FIREBASE_ROOT),
+    var fb = new Firebase(FIREBASE_ROOT),
         playing = fb.child('playing'),
-        time = fb.child('time'),
-        video = $('.sync-video');
+        seekTime = fb.child('seek-time'),
+        playTime = fb.child('play-time'),
+        video = $('.sync-video'),
+        lockRemoteState = false,
+        initialized = false,
+        initialTimePulled = false,
 
-    video.on('play', function() {
-        playing.set(true);
-    });
+        // Push playing/paused to Firebase/playing
+        pushPlayState = function (e) {
+            if (lockRemoteState === false) {
+                playing.set(!e.target.paused);
+            }
+        },
 
-    video.on('pause', function() {
-        playing.set(false);
-    });
+        // Push current video time to Firebase/play-time
+        pushPlayTime = function (e) {
+            if (lockRemoteState === false && initialTimePulled === true) {
+                playTime.set(e.target.currentTime);
+            }
+        },
 
-    video.on('seeked', function(e) {
-        var newTime = e.target.currentTime;
-        pushTime(newTime);
-    });
+        // Push current video time to Firebase/seek-time
+        pushSeekTime = function (e) {
+            if (lockRemoteState === true) {
+                seekTime.set(e.target.currentTime);
+            }
+        },
 
-    playing.on('value', updatePlay);
-    time.on('value', pullTime);
+        // If playingState contains true, play. Otherwise pause.
+        updateLocalPlayState = function (playingState) {
+            lockRemoteState = true;
+            playingState.val() === true ? video[0].play() : video[0].pause();
+            lockRemoteState = false;
+        },
+
+        updateLocalTime = function (receivedTime, options) {
+            // Silly JS
+            options = options || {};
+            lockRemoteState = true;
+
+            /*
+             * Check for initialized so we don't go to the last seek unless
+             * it's actually a change
+             *
+             * Check for options.force so we can go to the last play position
+             * as part of the initialization (while initialized === false)
+             */
+            if (initialized === true || options.force === true) {
+                video[0].currentTime = receivedTime.val();
+                initialTimePulled = true;
+            }
+            lockRemoteState = false;
+        },
+
+        initialize = function () {
+            playing.on('value', updateLocalPlayState);
+            seekTime.on('value', updateLocalTime);
+            playTime.once('value', function (e) {
+                updateLocalTime(e, { force: true });
+            });
+            video.on('play', pushPlayState);
+            video.on('pause', pushPlayState);
+            video.on('seeked', pushSeekTime);
+            video.on('timeupdate', pushPlayTime);
+
+            initialized = true;
+        };
+
+    initialize();
+
 }());
