@@ -14,7 +14,7 @@
     var video = $('.sync-video'),
         fb = new Firebase(FIREBASE_ROOT)
             .child(encodeURIComponent(video[0].currentSrc)
-                .replace('.', '%2E')),
+                .replace(/\./g, '%2E')),
         playing = fb.child('playing'),
         seekTime = fb.child('seek-time'),
         playTime = fb.child('play-time'),
@@ -38,9 +38,16 @@
 
         // Push current video time to Firebase/seek-time
         pushSeekTime = function (e) {
-            if (lockRemoteState === false) {
+            if (initialTimePulled === true && lockRemoteState === false) {
                 seekTime.set(e.target.currentTime);
             }
+            /*
+             * I probably deserve to be killed for this but here's the
+             * reasoning. The browser API does not seem to distinguish between
+             * the user changing the time and a script changing it so we know
+             * we have pulled initial time when this script is called
+             */
+            initialTimePulled = true;
         },
 
         // If playingState contains true, play. Otherwise pause.
@@ -64,7 +71,6 @@
              */
             if (initialized === true || options.force === true) {
                 video[0].currentTime = receivedTime.val();
-                initialTimePulled = true;
             }
             lockRemoteState = false;
         },
@@ -83,6 +89,6 @@
             initialized = true;
         };
 
-    initialize();
+    $(document).ready(initialize);
 
 }());
