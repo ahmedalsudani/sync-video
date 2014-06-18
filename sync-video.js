@@ -89,6 +89,6 @@
             initialized = true;
         };
 
-    $(document).ready(initialize);
+    video.on('loadedmetadata', initialize)
 
 }());
