@@ -32,5 +32,7 @@ http://www.gnu.org/licenses/licenses.html
 
 - Change behavior so that syncVideo is a function that takes a video element and
   syncs that
+- If seeking to the same spot: seek
+- Change behavior so they're all unique events (fixes above)
 
 Copyright 2014 Ahmed Al-Sudani
