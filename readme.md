@@ -30,6 +30,7 @@ http://www.gnu.org/licenses/licenses.html
 
 ### TODO
 
+- **This madness needs to end**: Rewrite whole program in a way that makes more sense.
 - Change behavior so that syncVideo is a function that takes a video element and
   syncs that
 - If seeking to the same spot: seek

@@ -21,6 +21,7 @@
         lockRemoteState = false,
         initialized = false,
         initialTimePulled = false,
+        lastRecordedTime = 0,
 
         // Push playing/paused to Firebase/playing
         pushPlayState = function (e) {
@@ -75,6 +76,14 @@
             lockRemoteState = false;
         },
 
+        stopIfBuffering = function () {
+            if (!video[0].paused && video[0].currentTime === lastRecordedTime) {
+                console.log('paused');
+                video[0].pause();
+            }
+            lastRecordedTime = video[0].currentTime;
+        },
+
         initialize = function () {
             playing.on('value', updateLocalPlayState);
             seekTime.on('value', updateLocalTime);
@@ -85,6 +94,7 @@
             video.on('pause', pushPlayState);
             video.on('seeked', pushSeekTime);
             video.on('timeupdate', pushPlayTime);
+            video.on('progress', stopIfBuffering);
 
             initialized = true;
         };
