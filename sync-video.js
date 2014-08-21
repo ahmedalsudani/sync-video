@@ -22,6 +22,7 @@
         initialized = false,
         initialTimePulled = false,
         lastRecordedTime = 0,
+        consecutiveConflicts = 0,
 
         // Push playing/paused to Firebase/playing
         pushPlayState = function (e) {
@@ -78,6 +79,12 @@
 
         stopIfBuffering = function () {
             if (!video[0].paused && video[0].currentTime === lastRecordedTime) {
+                consecutiveConflicts += 1;
+            } else {
+                consecutiveConflicts = 0;
+            }
+
+            if (consecutiveConflicts > 3) {
                 console.log('paused');
                 video[0].pause();
             }
