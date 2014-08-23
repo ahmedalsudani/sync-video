@@ -25,7 +25,8 @@ http://www.gnu.org/licenses/licenses.html
 - Import the Firebase client. (Look at [this page]
   (https://www.firebase.com/docs/web-quickstart.html) if you need to find it)
 - Define a global `FIREBASE_ROOT` variable that points to one of your apps
-- Call `syncVideo` with the video element as an argument
+- Call `syncVideo` with the video element as the first argument and a unique ID
+  as the second. The ID has to be the same across clients.
 - Profit
 
 ### TODO
