@@ -9,15 +9,13 @@
 
 /*global $, Firebase, FIREBASE_ROOT */
 
-function syncVideo(video) {
+function syncVideo(video, id) {
     'use strict';
     var $video = $(video),
-        fb = new Firebase(FIREBASE_ROOT)
-            .child(encodeURIComponent(video.currentSrc)
-                .replace(/\./g, '%2E')),
-        playing = fb.child('playing'),
-        seekTime = fb.child('seek-time'),
-        playTime = fb.child('play-time'),
+        fb = null,
+        playing = null,
+        seekTime = null,
+        playTime = null,
         lockRemoteState = false,
         initialized = false,
         initialTimePulled = false,
@@ -93,11 +91,19 @@ function syncVideo(video) {
         },
 
         initialize = function () {
+            fb = new Firebase(FIREBASE_ROOT)
+                .child(encodeURIComponent(id)
+                    .replace(/\./g, '%2E'));
+            playing = fb.child('playing');
+            seekTime = fb.child('seek-time');
+            playTime = fb.child('play-time');
+
             playing.on('value', updateLocalPlayState);
             seekTime.on('value', updateLocalTime);
             playTime.once('value', function (e) {
                 updateLocalTime(e, { force: true });
             });
+
             $video.on('play', pushPlayState);
             $video.on('pause', pushPlayState);
             $video.on('seeked', pushSeekTime);
