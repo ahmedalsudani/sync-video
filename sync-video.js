@@ -9,11 +9,11 @@
 
 /*global $, Firebase, FIREBASE_ROOT */
 
-(function () {
+function syncVideo(video) {
     'use strict';
-    var video = $('.sync-video'),
+    var $video = $(video),
         fb = new Firebase(FIREBASE_ROOT)
-            .child(encodeURIComponent(video[0].currentSrc)
+            .child(encodeURIComponent(video.currentSrc)
                 .replace(/\./g, '%2E')),
         playing = fb.child('playing'),
         seekTime = fb.child('seek-time'),
@@ -55,7 +55,8 @@
         // If playingState contains true, play. Otherwise pause.
         updateLocalPlayState = function (playingState) {
             lockRemoteState = true;
-            playingState.val() === true ? video[0].play() : video[0].pause();
+            //noinspection JSLint
+            playingState.val() === true ? video.play() : video.pause();
             lockRemoteState = false;
         },
 
@@ -72,13 +73,13 @@
              * as part of the initialization (while initialized === false)
              */
             if (initialized === true || options.force === true) {
-                video[0].currentTime = receivedTime.val();
+                video.currentTime = receivedTime.val();
             }
             lockRemoteState = false;
         },
 
         stopIfBuffering = function () {
-            if (!video[0].paused && video[0].currentTime === lastRecordedTime) {
+            if (!video.paused && video.currentTime === lastRecordedTime) {
                 consecutiveConflicts += 1;
             } else {
                 consecutiveConflicts = 0;
@@ -86,9 +87,9 @@
 
             if (consecutiveConflicts > 3) {
                 console.log('paused');
-                video[0].pause();
+                video.pause();
             }
-            lastRecordedTime = video[0].currentTime;
+            lastRecordedTime = video.currentTime;
         },
 
         initialize = function () {
@@ -97,15 +98,19 @@
             playTime.once('value', function (e) {
                 updateLocalTime(e, { force: true });
             });
-            video.on('play', pushPlayState);
-            video.on('pause', pushPlayState);
-            video.on('seeked', pushSeekTime);
-            video.on('timeupdate', pushPlayTime);
-            video.on('progress', stopIfBuffering);
+            $video.on('play', pushPlayState);
+            $video.on('pause', pushPlayState);
+            $video.on('seeked', pushSeekTime);
+            $video.on('timeupdate', pushPlayTime);
+            $video.on('progress', stopIfBuffering);
 
             initialized = true;
         };
 
-    video.on('loadedmetadata', initialize)
+    if (video.readyState >= video.HAVE_METADATA) {
+        initialize();
+    } else {
+        $video.on('loadedmetadata', initialize);
+    }
 
-}());
+}
