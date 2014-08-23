@@ -21,11 +21,11 @@ http://www.gnu.org/licenses/licenses.html
 ## How to use
 
 - Create a Firebase account and make an app
-- Import jQuery. Easy to avoid but jQuery is so nice and works everywhere
+- Import jQuery 
 - Import the Firebase client. (Look at [this page]
   (https://www.firebase.com/docs/web-quickstart.html) if you need to find it)
 - Define a global `FIREBASE_ROOT` variable that points to one of your apps
-- Add `sync-video` as a class to the video element you want synced
+- Call `syncVideo` with the video element as an argument
 - Profit
 
 ### TODO
