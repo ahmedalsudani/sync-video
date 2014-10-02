@@ -5,6 +5,8 @@
 A tiny minimalist JavaScript app that syncs play/pause status across different
 viewers.
 
+## [Demo](http://ahmed.al-sudani.com/projects/sync-video#demo)
+
 ## License
 
 sync-video is licensed under GPLv3.
