@@ -5,6 +5,7 @@
  * Email: ahmed [at] al-sudani.com
  * License: GPLv3
  * Copyright 2014 Ahmed Al-Sudani
+ * Version 0.1.1
  */
 
 /*global $, Firebase, FIREBASE_ROOT */
@@ -20,7 +21,6 @@ function syncVideo(video, id) {
         initialized = false,
         initialTimePulled = false,
         lastRecordedTime = 0,
-        consecutiveConflicts = 0,
 
         // Push playing/paused to Firebase/playing
         pushPlayState = function (e) {
@@ -76,20 +76,6 @@ function syncVideo(video, id) {
             lockRemoteState = false;
         },
 
-        stopIfBuffering = function () {
-            if (!video.paused && video.currentTime === lastRecordedTime) {
-                consecutiveConflicts += 1;
-            } else {
-                consecutiveConflicts = 0;
-            }
-
-            if (consecutiveConflicts > 3) {
-                console.log('paused');
-                video.pause();
-            }
-            lastRecordedTime = video.currentTime;
-        },
-
         initialize = function () {
             fb = new Firebase(FIREBASE_ROOT)
                 .child(encodeURIComponent(id)
@@ -108,7 +94,6 @@ function syncVideo(video, id) {
             $video.on('pause', pushPlayState);
             $video.on('seeked', pushSeekTime);
             $video.on('timeupdate', pushPlayTime);
-            $video.on('progress', stopIfBuffering);
 
             initialized = true;
         };
