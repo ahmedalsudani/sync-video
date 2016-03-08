@@ -1,0 +1,23 @@
+{
+  "name": "sync-video",
+  "version": "0.1.1",
+  "description": "Sync videos across separate viewers",
+  "main": "sync-video.js",
+  "scripts": {
+    "test": "echo no tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmedalsudani/sync-video.git"
+  },
+  "keywords": [
+    "sync",
+    "video"
+  ],
+  "author": "Ahmed Al-Sudani",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/ahmedalsudani/sync-video/issues"
+  },
+  "homepage": "https://github.com/ahmedalsudani/sync-video#readme"
+}
