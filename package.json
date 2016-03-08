@@ -1,6 +1,6 @@
 {
   "name": "sync-video",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Sync videos across separate viewers",
   "main": "sync-video.js",
   "scripts": {
@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/ahmedalsudani/sync-video/issues"
   },
-  "homepage": "https://github.com/ahmedalsudani/sync-video#readme"
+  "homepage": "https://github.com/ahmedalsudani/sync-video#readme",
+  "dependencies": {
+    "firebase": "^2.4.1"
+  }
 }

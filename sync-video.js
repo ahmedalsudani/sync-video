@@ -5,14 +5,16 @@
  * Email: ahmed [at] al-sudani.com
  * License: GPLv3
  * Copyright 2014 Ahmed Al-Sudani
- * Version 0.1.1
+ * Version 0.1.2
  */
 
-/*global $, Firebase, FIREBASE_ROOT */
+
 (function() {
+    var Firebase = require('firebase');
+
     function syncVideo(video, id) {
         'use strict';
-        var $video = $(video),
+        var $video = video,
             fb = null,
             playing = null,
             seekTime = null,
@@ -90,10 +92,10 @@
                     updateLocalTime(e, { force: true });
                 });
 
-                $video.on('play', pushPlayState);
-                $video.on('pause', pushPlayState);
-                $video.on('seeked', pushSeekTime);
-                $video.on('timeupdate', pushPlayTime);
+                video.addEventListener('play', pushPlayState);
+                video.addEventListener('pause', pushPlayState);
+                video.addEventListener('seeked', pushSeekTime);
+                video.addEventListener('timeupdate', pushPlayTime);
 
                 initialized = true;
             };
@@ -101,9 +103,8 @@
         if (video.readyState >= video.HAVE_METADATA) {
             initialize();
         } else {
-            $video.on('loadedmetadata', initialize);
+            video.addEventListener('loadedmetadata', initialize);
         }
-
     }
 
     if( typeof exports !== 'undefined' ) {
