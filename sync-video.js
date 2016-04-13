@@ -5,24 +5,19 @@
  * Email: ahmed [at] al-sudani.com
  * License: GPLv3
  * Copyright 2014 Ahmed Al-Sudani
- * Version 0.1.2
+ * Version 0.1.3
  */
 
 
 (function() {
-    var Firebase = require('firebase');
-
-    function syncVideo(video, id) {
+    function syncVideo(firebase, video) {
         'use strict';
-        var $video = video,
-            fb = null,
-            playing = null,
+        var playing = null,
             seekTime = null,
             playTime = null,
             lockRemoteState = false,
             initialized = false,
             initialTimePulled = false,
-            lastRecordedTime = 0,
 
             // Push playing/paused to Firebase/playing
             pushPlayState = function (e) {
@@ -79,12 +74,9 @@
             },
 
             initialize = function () {
-                fb = new Firebase(FIREBASE_ROOT)
-                    .child(encodeURIComponent(id)
-                           .replace(/\./g, '%2E'));
-                playing = fb.child('playing');
-                seekTime = fb.child('seek-time');
-                playTime = fb.child('play-time');
+                playing = firebase.child('playing');
+                seekTime = firebase.child('seek-time');
+                playTime = firebase.child('play-time');
 
                 playing.on('value', updateLocalPlayState);
                 seekTime.on('value', updateLocalTime);
